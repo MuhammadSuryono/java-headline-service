@@ -9,31 +9,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "packet_news", schema = "try_db")
+@Table(name = "pdf_news", schema = "try_db")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PacketNews implements Serializable {
-
-    private static final long serialVersionUID = 1968308713726727962L;
+public class PdfNews {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String packetName;
-    private Integer duration;
-    private String unit;
-    private String Price;
-    private String disc;
+    private String title;
+    private String description;
+    private String dateEdision;
+    private String thumbnail;
+    private String pdf;
     @JsonIgnore
     private Timestamp createdAt;
     @JsonIgnore
     private Timestamp updatedAt;
+
+
 }
