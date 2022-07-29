@@ -54,6 +54,7 @@ public class PackageNewsService {
                 "SUCCESS GETTING DATA",
                 (Serializable) pdfNews,
                 HttpStatus.OK);
+
         return response;
     }
 }
