@@ -13,7 +13,6 @@ import silampari.headline.koran.domain.dao.PacketNews;
 import silampari.headline.koran.domain.dao.PdfNews;
 import silampari.headline.koran.exception.CommonException;
 import silampari.headline.koran.util.ResponseUtil;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
