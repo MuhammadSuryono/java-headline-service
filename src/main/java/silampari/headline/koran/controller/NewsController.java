@@ -16,15 +16,24 @@ public class NewsController {
 
     @ResponseBody
     @GetMapping(value = "/koran/paket", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<Object> responsePackage(){
+    private ResponseEntity<Object> responsePacket(){
         return packageNewsService.getAllPackage();
     }
 
-
-
+    // TODO:
+    // Tambahkan parameter filtering startDate and endDate
     @ResponseBody
     @GetMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<Object> responseNews(){
+    private ResponseEntity<Object> responseNewsPaper(){
+        return packageNewsService.getNews();
+    }
+
+    // TODO:
+    // Untuk special edition, nanti saya tambahkan satu kolom
+    // Ini nonong yang kerjakan
+    @ResponseBody
+    @GetMapping(value = "/koran/pdf/special-edition", produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<Object> responsePdfNewsSpecialEdition(){
         return packageNewsService.getNews();
     }
 
