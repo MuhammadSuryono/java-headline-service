@@ -15,6 +15,7 @@ import silampari.headline.koran.exception.CommonException;
 import silampari.headline.koran.util.ResponseUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 @Service
@@ -29,9 +30,6 @@ public class PackageNewsService {
     public ResponseEntity<Object> getAllPackage(){
         ResponseEntity<Object> response = null;
         List<PacketNews> getPackege = packageNewsRepository.findAll();
-        if (Objects.isNull(getPackege)){
-            throw new CommonException("Error While Trying to get data because data null");
-        }
         response = ResponseUtil.buildResponse(
                 "SUCCESS",
                 "SUCCESS GETTING DATA",
@@ -42,12 +40,9 @@ public class PackageNewsService {
 
     public ResponseEntity<Object> getNews() {
         ResponseEntity<Object> response = null;
-        Pageable pageable = PageRequest.of(1, 12, Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(1, 2, Sort.Direction.DESC, "date_edision");
 
         List<PdfNews> pdfNews = pdfNewsRepository.findAll(pageable).getContent();
-        if (Objects.isNull(pdfNews)){
-            throw new CommonException("Error While Trying to get data because data null");
-        }
         response = ResponseUtil.buildResponse(
                 "SUCCESS",
                 "SUCCESS GETTING DATA",
@@ -64,9 +59,13 @@ public class PackageNewsService {
      * @return
      */
     public ResponseEntity<Object> pdfNewsSpecialEdition(Integer limit, Integer page, String sort) {
-        Pageable pdfPagination = PageRequest.of(page, limit).withSort(Sort.Direction.DESC, "id");
+        sort = sort.toLowerCase(Locale.ROOT);
 
-        List<PdfNews> pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEdition(1);
+        List<PdfNews> pdfSpecialEdition;
+        Pageable pdfPagination = PageRequest.of(page, limit);
+        if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
+        else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionDesc(1, pdfPagination);
+
         return ResponseUtil.buildResponse(
                 "SUCCESS",
                 "SUCCESS GETTING DATA",
