@@ -19,6 +19,7 @@ public class KoranPdfRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
     private String date;
     private String sorting;
+    private Integer isSpecial;
 
 
 }

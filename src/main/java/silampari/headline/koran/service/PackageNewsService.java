@@ -78,6 +78,9 @@ public class PackageNewsService {
         if (ObjectUtils.isEmpty(pdfRequest.getSorting()) || pdfRequest.getSorting().toLowerCase().equals("desc")) {
             newPdf = newPdf.stream().sorted(Comparator.comparing(PdfNews::getDateEdision).reversed()).collect(Collectors.toList());
         }
+        if (!ObjectUtils.isEmpty(pdfRequest.getIsSpecial())){
+            newPdf = newPdf.stream().filter(x->x.getSpecialEdition().equals(pdfRequest.getIsSpecial())).collect(Collectors.toList());
+        }
         List<PdfNews> finalPdf = newPdf;
         finalPdf.stream().forEach(x -> {
             PdfNewsDto newsDto = new PdfNewsDto();
@@ -114,15 +117,5 @@ public class PackageNewsService {
      * @param sort
      * @return
      */
-    public ResponseEntity<Object> pdfNewsSpecialEdition(Integer limit, Integer page, String sort) {
-        Pageable pdfPagination = PageRequest.of(page, limit).withSort(Sort.Direction.DESC, "id");
 
-        List<PdfNews> pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEdition(1);
-        return ResponseUtil.buildResponse(
-                "SUCCESS",
-                "SUCCESS GETTING DATA",
-                (Serializable) pdfSpecialEdition,
-                HttpStatus.OK
-        );
-    }
 }

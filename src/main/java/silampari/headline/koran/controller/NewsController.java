@@ -25,6 +25,7 @@ public class NewsController {
 
     // TODO:
     // Tambahkan parameter filtering startDate and endDate
+    // special edition set isSpecial = 1 isSpecial = 0 get non special if isSpecial "" or null get all data pdf
     @ResponseBody
     @GetMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<Object> responseNewsPaper(@RequestBody KoranPdfRequest pdfRequest) throws  Exception{
@@ -34,19 +35,11 @@ public class NewsController {
     // TODO:
     // Untuk special edition, nanti saya tambahkan satu kolom
     // Ini nonong yang kerjakan
-    @ResponseBody
-    @GetMapping(value = "/koran/pdf/special-edition", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<Object> responsePdfNewsSpecialEdition(
-            @RequestParam("limit") Integer limit,
-            @RequestParam("sort") String sort,
-            @RequestParam("page") Integer page){
-
-        if (sort == null) sort = "desc";
-        if (page == null) page = 1;
-        if (limit == null) limit = 12;
-
-        return packageNewsService.pdfNewsSpecialEdition(limit, page, sort);
-    }
+//    @ResponseBody
+//    @GetMapping(value = "/koran/pdf/special-edition", produces = MediaType.APPLICATION_JSON_VALUE)
+//    private ResponseEntity<Object> responsePdfNewsSpecialEdition(KoranPdfRequest request){
+//        return packageNewsService.pdfNewsSpecialEdition(request);
+//    }
 
 
 }
