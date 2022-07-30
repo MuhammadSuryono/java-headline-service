@@ -15,7 +15,7 @@ public class NewsController {
     private PackageNewsService packageNewsService;
 
     @ResponseBody
-    @GetMapping(value = "/getPackage", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/koran/paket", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<Object> responsePackage(){
         return packageNewsService.getAllPackage();
     }
@@ -23,7 +23,7 @@ public class NewsController {
 
 
     @ResponseBody
-    @GetMapping(value = "/getNews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<Object> responseNews(){
         return packageNewsService.getNews();
     }
