@@ -106,4 +106,23 @@ public class PackageNewsService {
                 HttpStatus.OK);
         return response;
     }
+
+    /**
+     *
+     * @param limit
+     * @param page
+     * @param sort
+     * @return
+     */
+    public ResponseEntity<Object> pdfNewsSpecialEdition(Integer limit, Integer page, String sort) {
+        Pageable pdfPagination = PageRequest.of(page, limit).withSort(Sort.Direction.DESC, "id");
+
+        List<PdfNews> pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEdition(1);
+        return ResponseUtil.buildResponse(
+                "SUCCESS",
+                "SUCCESS GETTING DATA",
+                (Serializable) pdfSpecialEdition,
+                HttpStatus.OK
+        );
+    }
 }

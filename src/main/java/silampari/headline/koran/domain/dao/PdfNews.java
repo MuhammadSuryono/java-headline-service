@@ -30,6 +30,7 @@ public class PdfNews {
     private Date dateEdision;
     private String thumbnail;
     private String pdf;
+    private Integer specialEdition;
     @JsonIgnore
     private Timestamp createdAt;
     @JsonIgnore
