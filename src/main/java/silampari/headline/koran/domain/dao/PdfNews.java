@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "pdf_news", schema = "try_db")
@@ -26,7 +27,7 @@ public class PdfNews {
 
     private String title;
     private String description;
-    private String dateEdision;
+    private Date dateEdision;
     private String thumbnail;
     private String pdf;
     @JsonIgnore
