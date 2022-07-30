@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import silampari.headline.koran.domain.dto.KoranPdfRequest;
 import silampari.headline.koran.service.PackageNewsService;
 
 @RestController
@@ -23,10 +25,11 @@ public class NewsController {
 
     // TODO:
     // Tambahkan parameter filtering startDate and endDate
+    // special edition set isSpecial = 1 isSpecial = 0 get non special if isSpecial "" or null get all data pdf
     @ResponseBody
     @GetMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<Object> responseNewsPaper(){
-        return packageNewsService.getNews();
+    private ResponseEntity<Object> responseNewsPaper(@RequestBody KoranPdfRequest pdfRequest) throws  Exception{
+        return packageNewsService.getNews(pdfRequest);
     }
 
     @ResponseBody
