@@ -2,6 +2,8 @@ package silampari.headline.koran.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import silampari.headline.koran.domain.dao.PacketNews;
 import silampari.headline.koran.domain.dao.PdfNews;
 import silampari.headline.koran.domain.dto.KoranPdfRequest;
 import silampari.headline.koran.domain.dto.KoranPdfResponse;
+import silampari.headline.koran.domain.dto.PaginationResponse;
 import silampari.headline.koran.domain.dto.PdfNewsDto;
 import silampari.headline.koran.exception.CommonException;
 import silampari.headline.koran.util.ParsingDate;
@@ -126,10 +129,17 @@ public class PackageNewsService {
         if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
         else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionDesc(1, pdfPagination);
 
+        PaginationResponse pagination = PaginationResponse.builder()
+                .totalPage(pdfNewsRepository.findAllBySpecialEdition(1).size())
+                .pageNumber(pdfPagination.getPageNumber() + 1)
+                .limit(pdfPagination.getPageSize())
+                .pdfNews(pdfSpecialEdition)
+                .build();
+
         return ResponseUtil.buildResponse(
                 "SUCCESS",
                 "SUCCESS GETTING DATA",
-                (Serializable) pdfSpecialEdition,
+                (Serializable) pagination,
                 HttpStatus.OK
         );
     }
