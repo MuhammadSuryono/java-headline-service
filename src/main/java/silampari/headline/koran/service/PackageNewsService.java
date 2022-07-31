@@ -41,9 +41,6 @@ public class PackageNewsService {
     public ResponseEntity<Object> getAllPackage() {
         ResponseEntity<Object> response = null;
         List<PacketNews> getPackege = packageNewsRepository.findAll();
-        if (Objects.isNull(getPackege)) {
-            throw new CommonException("Error While Trying to get data because data null");
-        }
         response = ResponseUtil.buildResponse(
                 "SUCCESS",
                 "SUCCESS GETTING DATA",
@@ -61,9 +58,6 @@ public class PackageNewsService {
                 .sorted(Comparator.comparing(PdfNews::getDateEdision))
                 .collect(Collectors.toList());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        if (Objects.isNull(newPdf)) {
-            throw new CommonException("Error While Trying to get data because data null");
-        }
         newPdf.stream().forEach(x -> {
             try {
                 x.setDateEdision(dateFormat.parse(x.getDateEdision().toString()));
