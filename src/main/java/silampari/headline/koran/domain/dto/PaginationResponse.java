@@ -16,11 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PaginationResponse implements Serializable {
+public class PaginationResponse<T> implements Serializable {
     private static final long serialVersionUID = 5414975445516496207L;
 
     private int totalPage;
+    private int totalData;
+    private int totalCurrentData;
     private int limit;
     private int pageNumber;
-    private List<PdfNews> pdfNews;
+    private T pdfNews;
 }
