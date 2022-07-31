@@ -23,11 +23,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,15 +116,21 @@ public class PackageNewsService {
      * @param sort
      * @return
      */
-    public ResponseEntity<Object> pdfNewsSpecialEdition(Integer limit, Integer page, String sort) {
+    public ResponseEntity<Object> pdfNewsSpecialEdition(Integer limit, Integer page, String sort, Date startDate, Date endDate) {
         sort = sort.toLowerCase(Locale.ROOT);
 
         List<PdfNews> pdfSpecialEdition;
         Pageable pdfPagination = PageRequest.of(page, limit);
-        if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
-        else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionDesc(1, pdfPagination);
+        if (startDate != null) {
+            if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionAsc(1, startDate, endDate, pdfPagination);
+            else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionDesc(1, startDate, endDate, pdfPagination);
+        } else {
+            if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
+            else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionDesc(1, pdfPagination);
+        }
 
-        int totalData = pdfNewsRepository.findAllBySpecialEdition(1).size();
+        int totalData = 0;
+        if (pdfSpecialEdition.size() > 0) totalData = pdfNewsRepository.findAllBySpecialEdition(1).size();
 
         return ResponseUtil.buildResponse(
                 "SUCCESS",

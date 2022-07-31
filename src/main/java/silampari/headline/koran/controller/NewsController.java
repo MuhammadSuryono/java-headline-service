@@ -1,6 +1,7 @@
 package silampari.headline.koran.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import silampari.headline.koran.domain.dto.KoranPdfRequest;
 import silampari.headline.koran.service.PackageNewsService;
+import silampari.headline.koran.util.DateUtil;
+
+import java.util.Date;
 
 @RestController
 public class NewsController {
@@ -37,15 +41,19 @@ public class NewsController {
     private ResponseEntity<Object> responsePdfNewsSpecialEdition(
             @RequestParam(name = "limit", required = false) Integer limit,
             @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(name = "page", required = false) Integer page){
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate){
 
         if (sort == null) sort = "desc";
         if (page == null) page = 0;
         else page = page - 1;
         if (limit == null) limit = 12;
 
-        return packageNewsService.pdfNewsSpecialEdition(limit, page, sort);
-    }
+        if (startDate != null && endDate == null) endDate = startDate;
+        if (endDate != null) endDate = DateUtil.addDays(endDate, 1);
 
+        return packageNewsService.pdfNewsSpecialEdition(limit, page, sort, startDate, endDate);
+    }
 
 }
