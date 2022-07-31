@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import silampari.headline.koran.domain.dto.PaginationResponse;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
 
 public class ResponseUtil {
 

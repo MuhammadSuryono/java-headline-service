@@ -19,4 +19,12 @@ public class ParsingDate {
         cal.add(Calendar.DATE, -1);
         return cal.getTime();
     }
+    public Date plusOne(String val) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = dateFormat.parse(val);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 1);
+        return cal.getTime();
+    }
 }

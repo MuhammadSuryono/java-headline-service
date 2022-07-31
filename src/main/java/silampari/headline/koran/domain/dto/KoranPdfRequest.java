@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 public class KoranPdfRequest {
 
     private Integer page;
+    private Integer limit;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
-    private String date;
+    private String startDate;
+    private String endDate;
     private String sorting;
     private Integer isSpecial;
 

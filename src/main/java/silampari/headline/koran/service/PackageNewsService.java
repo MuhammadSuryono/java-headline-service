@@ -53,6 +53,7 @@ public class PackageNewsService {
     }
 
     public ResponseEntity<Object> getNews(KoranPdfRequest pdfRequest) throws ParseException {
+
         ResponseEntity<Object> response = null;
         List<PdfNewsDto> resNewsDtos = new ArrayList<>();
         List<PdfNews> newPdf = pdfNewsRepository.findAll()
@@ -63,22 +64,26 @@ public class PackageNewsService {
         if (Objects.isNull(newPdf)) {
             throw new CommonException("Error While Trying to get data because data null");
         }
-        if (!ObjectUtils.isEmpty(pdfRequest.getDate())) {
-            newPdf.stream().forEach(x -> {
-                try {
-                    x.setDateEdision(dateFormat.parse(x.getDateEdision().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            });
-            var sort = this.parsingDate.minusOne(pdfRequest.getDate());
-            newPdf = newPdf.stream().filter(x -> sort.before(x.getDateEdision())).collect(Collectors.toList());
+        newPdf.stream().forEach(x -> {
+            try {
+                x.setDateEdision(dateFormat.parse(x.getDateEdision().toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+        if (!ObjectUtils.isEmpty(pdfRequest.getStartDate())) {
+            var sortStart = this.parsingDate.minusOne(pdfRequest.getStartDate());
+            newPdf = newPdf.stream().filter(x -> sortStart.before(x.getDateEdision())).collect(Collectors.toList());
+        }
+        if (!ObjectUtils.isEmpty(pdfRequest.getEndDate())) {
+            var sortEnd = this.parsingDate.plusOne(pdfRequest.getEndDate());
+            newPdf = newPdf.stream().filter(x -> x.getDateEdision().before(sortEnd)).collect(Collectors.toList());
         }
         if (ObjectUtils.isEmpty(pdfRequest.getSorting()) || pdfRequest.getSorting().toLowerCase().equals("desc")) {
             newPdf = newPdf.stream().sorted(Comparator.comparing(PdfNews::getDateEdision).reversed()).collect(Collectors.toList());
         }
-        if (!ObjectUtils.isEmpty(pdfRequest.getIsSpecial())){
-            newPdf = newPdf.stream().filter(x->x.getSpecialEdition().equals(pdfRequest.getIsSpecial())).collect(Collectors.toList());
+        if (!ObjectUtils.isEmpty(pdfRequest.getIsSpecial())) {
+            newPdf = newPdf.stream().filter(x -> x.getSpecialEdition().equals(pdfRequest.getIsSpecial())).collect(Collectors.toList());
         }
         List<PdfNews> finalPdf = newPdf;
         finalPdf.stream().forEach(x -> {
@@ -91,15 +96,15 @@ public class PackageNewsService {
             newsDto.setDateEdition(dateFormat.format(x.getDateEdision()));
             resNewsDtos.add(newsDto);
         });
-        PagedListHolder newPage = new PagedListHolder(finalPdf);
-        newPage.setPageSize(12);
+        PagedListHolder newPage = new PagedListHolder(resNewsDtos);
+        newPage.setPageSize(pdfRequest.getLimit());
         newPage.setPage(pdfRequest.getPage());
         KoranPdfResponse pdfResponse = KoranPdfResponse.builder()
                 .totalElement(newPage.getNrOfElements())
                 .totalPage(newPage.getPageCount())
                 .pageNumber(newPage.getPage())
                 .numberOfElement(finalPdf.size())
-                .pdfNews(resNewsDtos)
+                .pdfNews(newPage.getPageList())
                 .build();
         response = ResponseUtil.buildResponse(
                 "SUCCESS",
@@ -110,7 +115,6 @@ public class PackageNewsService {
     }
 
     /**
-     *
      * @param limit
      * @param page
      * @param sort
@@ -122,10 +126,13 @@ public class PackageNewsService {
         List<PdfNews> pdfSpecialEdition;
         Pageable pdfPagination = PageRequest.of(page, limit);
         if (startDate != null) {
-            if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionAsc(1, startDate, endDate, pdfPagination);
-            else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionDesc(1, startDate, endDate, pdfPagination);
+            if (sort.equals("asc"))
+                pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionAsc(1, startDate, endDate, pdfPagination);
+            else
+                pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionAndDateEdisionBetweenOrderByDateEdisionDesc(1, startDate, endDate, pdfPagination);
         } else {
-            if (sort.equals("asc")) pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
+            if (sort.equals("asc"))
+                pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionAsc(1, pdfPagination);
             else pdfSpecialEdition = pdfNewsRepository.findAllBySpecialEditionOrderByDateEdisionDesc(1, pdfPagination);
         }
 

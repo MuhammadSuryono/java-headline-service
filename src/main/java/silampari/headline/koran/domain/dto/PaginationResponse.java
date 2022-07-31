@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import silampari.headline.koran.domain.dao.PdfNews;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Builder
