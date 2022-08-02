@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "packet_news", schema = "try_db")
+@Table(name = "packet_news")
 @Data
 @Builder
 @NoArgsConstructor

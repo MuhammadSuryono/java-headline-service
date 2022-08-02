@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "pdf_news", schema = "try_db")
+@Table(name = "pdf_news")
 @Data
 @Builder
 @NoArgsConstructor

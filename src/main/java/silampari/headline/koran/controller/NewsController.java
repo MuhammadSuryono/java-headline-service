@@ -18,6 +18,7 @@ public class NewsController {
     private PackageNewsService packageNewsService;
 
     @ResponseBody
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/koran/paket", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<Object> responsePacket(){
         return packageNewsService.getAllPackage();
@@ -27,7 +28,8 @@ public class NewsController {
     // Tambahkan parameter filtering startDate and endDate
     // special edition set isSpecial = 1 isSpecial = 0 get non special if isSpecial "" or null get all data pdf
     @ResponseBody
-    @GetMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping(value = "/koran/pdf", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<Object> responseNewsPaper(@RequestBody KoranPdfRequest pdfRequest) throws  Exception{
         return packageNewsService.getNews(pdfRequest);
     }
