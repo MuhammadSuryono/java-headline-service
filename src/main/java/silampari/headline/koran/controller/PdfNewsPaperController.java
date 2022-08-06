@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import silampari.headline.koran.domain.dto.KoranPdfRequest;
-import silampari.headline.koran.service.PackageNewsService;
 import silampari.headline.koran.service.PdfNewsPaperService;
 
 @RestController
