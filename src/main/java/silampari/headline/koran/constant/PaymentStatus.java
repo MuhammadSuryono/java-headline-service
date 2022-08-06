@@ -1,19 +1,19 @@
 package silampari.headline.koran.constant;
 
 public enum PaymentStatus {
-    paid,
-    unpaid,
-    order;
+    PAID("paid"),
+    UNPAID("unpaid"),
+    ORDER("order");
 
-//    private String value;
-//
-//    private PaymentStatus(String value) {
-//        this.value = value;
-//    }
-//
-//    public String getValue() {
-//        return value;
-//    }
+    private String value;
+
+    private PaymentStatus(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
 
 }

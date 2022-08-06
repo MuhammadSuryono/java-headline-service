@@ -134,7 +134,7 @@ public class PackageNewsService {
 
             Subscriptions subscriptions = modelMapper.map(subscriptionsDto, Subscriptions.class);
             subscriptions.setIsVerification(Boolean.FALSE);
-            subscriptions.setStatus(PaymentStatus.unpaid);
+            subscriptions.setStatus(PaymentStatus.UNPAID.getValue());
             subscriptions.setPacketName(packetNews.getPacketName());
             subscriptions.setCreatedAt(new Date());
             subscriptions.setPrice(packetNews.getPrice());

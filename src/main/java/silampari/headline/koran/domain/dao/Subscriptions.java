@@ -36,7 +36,7 @@ public class Subscriptions {
     private String unit;
     private String grandTotal;
     private String dateTransaction;
-    private Enum status;
+    private String status;
     private Boolean isVerification;
     private String documentTransaction;
     private String numberOfRekeningPayment;
