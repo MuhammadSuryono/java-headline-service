@@ -1,0 +1,102 @@
+kind: pipeline
+type: docker
+name: Build for development
+
+steps:
+  - name: "build package"
+    image: maven:3.8.2-jdk-11
+    environment:
+      GOOS: linux
+      GOARCH: amd64
+      CGO_ENABLED: 0
+    commands:
+      - mvn clean package
+      -
+
+  - name: "build image to docker"
+    image: plugins/docker
+    settings:
+      repo: yonodocker97/java-silampari-headline
+      tags:
+        - dev-${DRONE_COMMIT_SHA:0:6}
+        - dev-latest
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: Dockerfile
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
+---
+kind: pipeline
+type: docker
+name: Deploy development
+
+steps:
+  - name: ssh pull image
+    image: appleboy/drone-ssh
+    environment:
+      IMAGE_NAME: yonodocker97/java-silampari-headline:dev-${DRONE_COMMIT_SHA:0:6}
+    settings:
+      host:
+        from_secret: server_host
+      username:
+        from_secret: server_username
+      password:
+        from_secret: server_password
+      port:
+        from_secret: server_port
+      envs:
+        - IMAGE_NAME
+      script:
+        - echo "Pull image docker"
+        - docker pull $IMAGE_NAME
+  - name: ssh clean image and container
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: server_host
+      username:
+        from_secret: server_username
+      password:
+        from_secret: server_password
+      port:
+        from_secret: server_port
+      script:
+        - docker stop java-silampari-headline
+        - docker rm java-silampari-headline
+        - docker system prune -a -f
+        - echo "Done"
+  - name: ssh deploy image
+    image: appleboy/drone-ssh
+    environment:
+      IMAGE_NAME: yonodocker97/java-silampari-headline:dev-${DRONE_COMMIT_SHA:0:6}
+    settings:
+      host:
+        from_secret: server_host
+      username:
+        from_secret: server_username
+      password:
+        from_secret: server_password
+      port:
+        from_secret: server_port
+      envs:
+        - IMAGE_NAME
+      script:
+        - docker run -d --name java-silampari-headline --publish 8084:8084 $IMAGE_NAME
+        - echo "Done"
+
+#  - name: "Notification Telegram"
+#    image: appleboy/drone-telegram
+trigger:
+  branch:
+    - master
+  event:
+    - push
+depends_on:
+  - Build for development
+
